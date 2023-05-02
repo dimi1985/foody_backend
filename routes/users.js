@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register/', async (req, res) => {
     try {
         await client.connect();
         const db = client.db();
