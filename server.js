@@ -1,46 +1,46 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
-const MONGODB_URI = 'mongodb+srv://dimi85:eshopdimi1234@cluster0.oq1a5ls.mongodb.net/foody_db?retryWrites=true&w=majority';
-
-
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Set up a MongoDB client and connect to the database
-const client = new MongoClient(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+const uri = "mongodb+srv://dimi85:eshopdimi1234@cluster0.oq1a5ls.mongodb.net/?retryWrites=true&w=majority";
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
 
-client.connect((err) => {
-  if (err) {
-    console.error(err);
+// Connect the client to the server (async function)
+async function connectToDatabase() {
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB", error);
     process.exit(1);
   }
+}
 
-  app.get('/', (req, res) => {
-    res.send('Connected to MongoDB');
-  });
+// Call the connectToDatabase function
+connectToDatabase();
 
-  console.log(`Connected to MongoDB`);
-
-
-  // Set up your API endpoints here using app.get(), app.post(), etc.
-
-  // Start the server
-  app.listen(port, () => {
-    app.get('/', (req, res) => {
-      res.send('Server listening on port ${port}');
-      console.log(`Server listening on port ${port}`);
-    });
-
-  });
+// Define your API endpoints here
+app.get('/', (req, res) => {
+  res.send('Connected to MongoDB');
 });
-
 
 app.get('/api/users', async (req, res) => {
   const db = client.db();
   const users = await db.collection('users').find().toArray();
   res.json(users);
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
