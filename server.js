@@ -1,11 +1,13 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const MONGODB_URI = 'mongodb+srv://dimi85:eshopdimi1234@cluster0.oq1a5ls.mongodb.net/?retryWrites=true&w=majority';
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Set up a MongoDB client and connect to the database
-const client = new MongoClient(process.env.MONGODB_URI, {
+const client = new MongoClient(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -16,13 +18,20 @@ client.connect((err) => {
     process.exit(1);
   }
 
-  console.log('Connected to MongoDB');
+  app.get('/', (req, res) => {
+    res.send('Connected to MongoDB');
+  });
+
+
 
   // Set up your API endpoints here using app.get(), app.post(), etc.
 
   // Start the server
   app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+    app.get('/', (req, res) => {
+      res.send('Server listening on port ${port}');
+    });
+
   });
 });
 
