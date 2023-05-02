@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app = express();
 const port = process.env.PORT || 3000;
+const usersRouter = require('./routes/users');
 
 const uri = "mongodb+srv://dimi85:eshopdimi1234@cluster0.oq1a5ls.mongodb.net/?retryWrites=true&w=majority";
 
@@ -14,6 +15,8 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   }
 });
+
+app.use('/api/users', usersRouter);
 
 // Connect the client to the server (async function)
 async function connectToDatabase() {
@@ -34,11 +37,7 @@ app.get('/', (req, res) => {
   res.send('Connected to MongoDB');
 });
 
-app.get('/api/users', async (req, res) => {
-  const db = client.db();
-  const users = await db.collection('users').find().toArray();
-  res.json(users);
-});
+
 
 // Start the server
 app.listen(port, () => {
