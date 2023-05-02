@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
-const MONGODB_URI = 'mongodb+srv://dimi85:eshopdimi1234@cluster0.oq1a5ls.mongodb.net/?retryWrites=true&w=majority';
+const MONGODB_URI = 'mongodb+srv://dimi85:eshopdimi1234@cluster0.oq1a5ls.mongodb.net/foody_db?retryWrites=true&w=majority';
+
 
 
 const app = express();
@@ -22,6 +23,7 @@ client.connect((err) => {
     res.send('Connected to MongoDB');
   });
 
+  console.log(`Connected to MongoDB`);
 
 
   // Set up your API endpoints here using app.get(), app.post(), etc.
@@ -30,6 +32,7 @@ client.connect((err) => {
   app.listen(port, () => {
     app.get('/', (req, res) => {
       res.send('Server listening on port ${port}');
+      console.log(`Server listening on port ${port}`);
     });
 
   });
